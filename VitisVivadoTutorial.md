@@ -80,7 +80,7 @@ left column. Click the `+` icon at the upper side of the diagram.
 Type `hls` for finding the add function ip.
 Type `zynq 7 series` for finding the ip of PYNQ-Z2 family.
 
-Becuase we specify an input and an output in our c++ code, we need to 
+Becuase we specify two inputs and an output in our c++ code, we need to 
 initialize two buses on the fpga. Double click the `zynq 7 series` icon
 on the block diagram. Select `PS-PL Configuration`. Then, select the 
 `AXI HP0 FPD` and `AXI HP1 FPD` under `Slave Interface > AXI HP` by
