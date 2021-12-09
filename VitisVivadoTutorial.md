@@ -1,28 +1,34 @@
-
-
 # How to build a vector addition using Vitis and Vivado?
 
-We are using Vitis HLS 2021.1 and Vivado 2021.1 for this tutorial. The FPGA is PYNQ-Z2. 
+We are using Vitis HLS 2021.1 and Vivado 2021.1 for this tutorial. The FPGA is PYNQ-Z2.
 
-### How to access Vitis and Vivado? 
+### How to access Vitis and Vivado?
 
 The recommended choice is using Vitis and Vivado that are preinstalled in Georgia Tech ECE server. Please find detailed information about setting up vpn and server [here](https://help.ece.gatech.edu/labs/names). Use the following cmd to locate the Vitis HLS 2021.1:
+
 ```sh
 cd tools/software/xilinx/Vitis_HLS/2021.1/bin
 ```
-Next, run the following command to start the Vitis. 
+
+Next, run the following command to start the Vitis.
+
 ```sh
 vitis_hls
 ```
-Vivado can be found by a similiar command: 
+
+Vivado can be found by a similiar command:
+
 ```sh
 cd tools/software/xilinx/Vivado/2021.1/bin
 ```
+
 It can be used by entering the following command.
+
 ```sh
 vivado
 ```
-The second choice is to install the your own [Vitis and Vivado](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vitis.html). It is not suggested because of its large size, but your own software sometimes might be faster than using the one on the server.  
+
+The second choice is to install the your own [Vitis and Vivado](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vitis.html). It is not suggested because of its large size, but your own software sometimes might be faster than using the one on the server.
 
 ### Design flow
 
@@ -33,10 +39,10 @@ In this section, we will introduce you the flow of building a vector addition fu
 Firstly, we need to create a new project. Let's use `vadd` as the project name.
 It is not necessay to specify the top function nor the testbench now.
 The Part Selection in the last page for initializing a new project, however, is very essential for this program to run.
-Because we use PYNQ-Z2, please be sure to select the board with `xc7z020clg400-1` Part and `220` DSP. 
+Because we use PYNQ-Z2, please be sure to select the board with `xc7z020clg400-1` Part and `220` DSP.
 
 Now we can write our acclerator in c++ and simulated with Vitis.
-Create a new source called `top.cc`. 
+Create a new source called `top.cc`.
 Copy paste the following code to `top.cc`.
 
 ```cpp
@@ -52,52 +58,52 @@ void add(int a[100], int b[100], int sum[100]) {
 }
 ```
 
-Click `Project > Project Synthesis`. Choose the `Synthesis` settings and 
-specify the `top.cc` as the top function. Next click the synthesis icon 
-(green triangle). If no error occurs after synthesizing, 
-click `Solution > Export RTL`. 
+Click `Project > Project Synthesis`. Choose the `Synthesis` settings and
+specify the `top.cc` as the top function. Next click the synthesis icon
+(green triangle). If no error occurs after synthesizing,
+click `Solution > Export RTL`.
 
 Now we have done with Vitis and will switch to Vivado.
 
 #### Vivado
 
-Similar to creating a new Vitis project, the initial set up of a new vivado 
+Similar to creating a new Vitis project, the initial set up of a new vivado
 project only requires the correct board selection. In our example,
-we name our project as `adderProject`. Make sure you select the 
+we name our project as `adderProject`. Make sure you select the
 same board as the one in Vitis (`xc7z020clg400-1` Part and `220` DSP).
 
 For the next step, we will need to add our vector addition ip core to the Vivado
 for building the block design. Click `IP Catalog` at the left column.
-Right click the `Vivado Repository` and select `Add Repository`. 
+Right click the `Vivado Repository` and select `Add Repository`.
 Select the folder that includes `Solution1`. After click the `select` button,
 you will see a small page telling you that "1 repository was added to the project".
-Expand the IPs tab. If you see the top ip with an orange icon, it means no issue 
-for now. If the icon is grey, you might want to check whether you choose the 
+Expand the IPs tab. If you see the top ip with an orange icon, it means no issue
+for now. If the icon is grey, you might want to check whether you choose the
 same board for Vitis and Vivado.
 
-Now we will build the block diagram. Click the `Create Block Design` at the 
+Now we will build the block diagram. Click the `Create Block Design` at the
 left column. Click the `+` icon at the upper side of the diagram.
 Type `hls` for finding the add function ip.
 Type `zynq 7 series` for finding the ip of PYNQ-Z2 family.
 
-Becuase we specify two inputs and an output in our c++ code, we need to 
+Becuase we specify two inputs and an output in our c++ code, we need to
 initialize two buses on the fpga. Double click the `zynq 7 series` icon
-on the block diagram. Select `PS-PL Configuration`. Then, select the 
+on the block diagram. Select `PS-PL Configuration`. Then, select the
 `AXI HP0 FPD` and `AXI HP1 FPD` under `Slave Interface > AXI HP` by
-checking their boxes. 
+checking their boxes.
 
 After this step, go back to the block diagram and click the `Run Connection Automation`.
 Select the `All Automation` at the left column.
-Click on the `S_AXI_HP0_FPD` and change its `Master Interface` to be 
+Click on the `S_AXI_HP0_FPD` and change its `Master Interface` to be
 `/add_0/m_axi_OUTPUT_r`. Click `OK` to start connection automation.
 When it finished, you will see a completed block diagram. To check its correctness,
 click the `validation` (check icon) on the upper page.
 
 We finished building the block diagram, and now we will create a wrapper for it.
-Find the block diagram file under the design sources. Right click the 
+Find the block diagram file under the design sources. Right click the
 design file (whatever you name it) and select `Create HDL Wrapper`.
-Choose `Let Vivado manage wrapper and auto-update` as option. 
-click `OK` to start. 
+Choose `Let Vivado manage wrapper and auto-update` as option.
+click `OK` to start.
 
 Finally, it comes to our last step. Click the `Generate Bitstream` under
 `PROGRAM AND DEBUG` division (at the lower left of the entire page).
@@ -111,14 +117,16 @@ You can copy/paste these two files to a flash drive and put them on your own lap
 
 ### Testing on PYNQ-Z2
 
-If you have not used the PYNQ-Z2 before, check this page for [setup](https://pynq.readthedocs.io/en/v2.6.1/getting_started/pynq_z2_setup.html#). 
+If you have not used the PYNQ-Z2 before, check this page for [setup](https://pynq.readthedocs.io/en/v2.6.1/getting_started/pynq_z2_setup.html#).
 
 If you already have a basic idea of Jupyter on PYNQ-Z2, upload the `.bit` file
 and the `.hwh` file to Jupyter. In the same folder, create a new `.ipynb` file
-for writing the script. 
+for writing the script.
+
+Note: If you need to find the address offset of your own registers, check the xadd_hw.h file under `solution1/impl/misc/drivers/add_v1_0/src` direcoty.
 
 ```python
-import numpy as np 
+import numpy as np
 import pynq
 from pynq import MMIO
 
@@ -170,21 +178,3 @@ ap_idle = bits>>2 & 0x1
 print(ap_idle)
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
