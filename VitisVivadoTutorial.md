@@ -123,6 +123,8 @@ If you already have a basic idea of Jupyter on PYNQ-Z2, upload the `.bit` file
 and the `.hwh` file to Jupyter. In the same folder, create a new `.ipynb` file
 for writing the script.
 
+Click [here](https://pynq.readthedocs.io/en/v2.0/overlay_design_methodology/overlay_tutorial.html) to access the overlay_tutorial.
+
 Note: If you need to find the address offset of your own registers, check the xadd_hw.h file under `solution1/impl/misc/drivers/add_v1_0/src` direcoty.
 
 ```python
