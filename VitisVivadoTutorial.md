@@ -110,8 +110,7 @@ Finally, it comes to our last step. Click the `Generate Bitstream` under
 Use the default settings (for our simple example) and start to run.
 
 After generating the bitstream file, we need two files for running the vector addition on FPGA: one with
-`.bit` as the extension and the other with `.hwh`. Bitstream file is easy to
-locate. The `.hwh` file is under directory
+`.bit` as the extension and the other with `.hwh`. You can find the `.bit` file under `adderProject/adderProject.runs/impl_1`. The `.hwh` file is under directory
 `adderProject/adderProject.gen/sources_1/bd/design_1/hw_handoff`.
 You can copy/paste these two files to a flash drive and put them on your own laptop for the next step.
 
